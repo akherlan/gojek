@@ -6,19 +6,20 @@ Data diimpor dari Gmail ke Google Sheets melalui Google Apps Script, diekspor ke
 
 ### Clock
 
-![time with gojek](figs/clock.png)
-
 Time with GOJEK
+
+![time with gojek](figs/clock.png)
 
 ### Distance
 
-![movement with gojek](figs/distance.png)
-
 Movement with GOJEK
+
+![movement with gojek](figs/distance_map.png)
 
 ### Costs
 
+Expenses with GOJEK
+
 ![expenses with gojek](figs/costs.png)
 
-Expenses with GOJEK
 
