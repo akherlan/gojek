@@ -6,14 +6,16 @@
 # Output File:     -
 # Data Output:     gojek.rds
 
+# clearing
+rm(list = ls())
+
 library(dplyr)
 library(tidyr)
 library(stringr)
 library(lubridate)
 
-
 # invoice mail from GOJEK
-travel <- read.csv("travel.csv")
+travel <- read.csv("data/travel.csv")
 content <- travel$body
 gojek <- travel %>% as_tibble()
 
@@ -161,6 +163,9 @@ gojek$price - gojek$discount + gojek$fee == gojek$paid
 
 # total consumption
 colSums(gojek[,c(3:8)])
+
+# sort by datetime
+gojek <- gojek %>% arrange(datetime)
 
 # save to RDS
 saveRDS(gojek, file = "output/gojek.rds")

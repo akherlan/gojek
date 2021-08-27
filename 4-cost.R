@@ -56,6 +56,9 @@ n_trans <- gojek %>%
   summarise(n_trans = n(), .groups = "drop") %>% 
   mutate(percent = round((n_trans/sum(n_trans))*100, 2))
 
+# text postion transaction done in app
+y_trans <- (cost$rupiah[5] + cost$rupiah[7])*2/3
+
 # plot for costs
 ggplot() + 
   # bar price + fee
@@ -97,10 +100,10 @@ ggplot() +
             size = 3.4, colour = "#005400") +
   # percent transaction done in app
   geom_text(data = filter(cost, cat == 1 & payment == "Cash"), 
-            aes(x = 0.5, y = 1380, label = paste0(n_trans$percent[2], "%")), 
+            aes(x = 0.5, y = y_trans + 170, label = paste0(n_trans$percent[2], "%")), 
             size = 12, colour = "gray60") +
   geom_text(data = filter(cost, cat == 1 & payment == "Cash"), 
-            aes(x = 0.5, y = 1070, 
+            aes(x = 0.5, y = y_trans - 350, 
                 label = "of transactions\nwere completed\nwithin the app"), 
             size = 5, colour = "gray60") +
   # graph's labels

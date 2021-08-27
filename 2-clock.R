@@ -25,7 +25,8 @@ clock <- gojek %>%
          x = hour(datetime),
          x = ifelse(y == 1, x-12L, x)*60L,
          x = x + minute(datetime),
-         col = gojek$vehicle)
+         col = gojek$vehicle) %>% 
+  arrange(datetime)
 
 # plot
 ggplot(data = clock) +
