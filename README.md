@@ -20,6 +20,6 @@ Movement with GOJEK
 
 Expenses with GOJEK
 
-![expenses with gojek](figs/costs.png)
+![expenses with gojek](figs/cost.png)
 
 
