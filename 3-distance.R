@@ -87,7 +87,7 @@ p1 <- ggplot(data = distn) +
   scale_x_continuous(limits = c(0, 75), breaks = c(seq(0, 15, 5), 30, 45, 60, 75)) +
   scale_colour_manual(values = c("#000000", "#00AA13")) +
   # main labels
-  labs(title = "Travel with GOJEK", 
+  labs(title = "Movement with GOJEK", 
        subtitle = paste0("As far as Merak to Banyuwangi (>1100 km) by car"),
        caption = "Github: akherlan | Data: GOJEK",
        x = "Duration (minutes)", y = "Distance (km)",

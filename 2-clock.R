@@ -28,6 +28,8 @@ clock <- gojek %>%
          col = gojek$vehicle) %>% 
   arrange(datetime)
 
+total_time <- round(sum(gojek$duration)/3600, 2)
+
 # plot
 ggplot(data = clock) +
   # am / pm
@@ -35,6 +37,10 @@ ggplot(data = clock) +
            size = 4, colour = "gray40", alpha = 0.3) +
   annotate(geom = "text", x = 0, y = 1.5, label = "PM",
            size = 4, colour = "gray40", alpha = 0.3) +
+  # total time
+  annotate(geom = "text", x = 0, y = -1,
+           size = 4, colour = "gray40", alpha = 0.8,
+           label = paste0("Total\n", total_time, " hours\non the road")) +
   # ride
   geom_segment(aes(x, y, xend = x + 1, yend = y + 0.8), 
                colour = "#00AA13", alpha = 0.4) +
@@ -48,7 +54,7 @@ ggplot(data = clock) +
                      breaks = seq(180, 720, 180), 
                      labels = c(3, 6, 9, "12")) +
   # text
-  labs(title = "Travel with GOJEK", x = NULL, y = NULL,
+  labs(title = "Time with GOJEK", x = NULL, y = NULL,
        subtitle = paste("Andi's movement in", 
                         min(year(gojek$datetime)), "-", 
                         max(year(gojek$datetime)), "(• is GoCar)", sep = " "),

@@ -108,8 +108,8 @@ ggplot() +
             size = 5, colour = "gray60") +
   # graph's labels
   labs(x = NULL, y = "Thousands of IDR", fill = NULL,
-       title = "Travel with GOJEK",
-       subtitle = "Expences for movement (Cash Vs. GoPay)",
+       title = "Expences with GOJEK",
+       subtitle = "Cost for movement (Cash Vs. GoPay)",
        caption = "Github: akherlan | Data: GOJEK") +
   # styling
   facet_wrap(~payment, strip.position = "bottom") +
