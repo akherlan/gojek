@@ -8,7 +8,7 @@ Data diimpor dari Gmail ke Google Sheets melalui Google Apps Script ([kode](code
 
 ![time with gojek](figs/clock.png)
 
-Saya tidak terlalu rutin menggunakan moda transporasi ini. Namun totalnya sudah lebih dari dua hari di jalan sejak 2018 hingga saat ini ditulis.
+Saya tidak terlalu rutin menggunakan moda transporasi ini. Namun totalnya sudah hampir dua hari di jalanan sejak 2018 hingga saat tulisan ini ditulis.
 
 ### Distance
 
