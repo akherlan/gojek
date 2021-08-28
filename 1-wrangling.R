@@ -31,6 +31,11 @@ gojek$vehicle <- content %>%
   str_remove("go-?") %>% 
   str_to_title()
 
+# order id
+gojek$order_id <- content %>% 
+  str_extract("RB-.+\\d+") %>% 
+  str_squish()
+
 # distance
 gojek$distance <- content %>% 
   str_extract("[D|J]\\w+.+\\skm") %>% 
@@ -162,10 +167,16 @@ gojek <- gojek %>%
 gojek$price - gojek$discount + gojek$fee == gojek$paid
 
 # total consumption
-colSums(gojek[,c(3:8)])
+colSums(gojek[,c(4:9)])
 
 # sort by datetime
 gojek <- gojek %>% arrange(datetime)
+
+# check: double invoice
+n_distinct(select(gojek, order_id)) == nrow(gojek)
+
+# handle double record
+# ???
 
 # save to RDS
 saveRDS(gojek, file = "output/gojek.rds")

@@ -100,10 +100,10 @@ ggplot() +
             size = 3.4, colour = "#005400") +
   # percent transaction done in app
   geom_text(data = filter(cost, cat == 1 & payment == "Cash"), 
-            aes(x = 0.5, y = y_trans + 170, label = paste0(n_trans$percent[2], "%")), 
+            aes(x = 0.5, y = y_trans + 150, label = paste0(n_trans$percent[2], "%")), 
             size = 12, colour = "gray60") +
   geom_text(data = filter(cost, cat == 1 & payment == "Cash"), 
-            aes(x = 0.5, y = y_trans - 350, 
+            aes(x = 0.5, y = y_trans - 365, 
                 label = "of transactions\nwere completed\nwithin the app"), 
             size = 5, colour = "gray60") +
   # graph's labels
@@ -122,13 +122,15 @@ ggplot() +
     axis.title = element_text(colour = "gray50"),
     plot.subtitle = element_text(colour = "gray40"),
     plot.caption = element_text(colour = "gray60"),
+    plot.title.position = "plot",
     strip.text = element_text(face = "bold", size = 11),
     panel.grid.major.x = element_blank(),
     panel.grid.minor.x = element_blank(),
     panel.grid.minor.y = element_blank(),
     panel.spacing = unit(0, "cm"),
-    legend.position = "top",
-    legend.justification = c(0, 1),
+    legend.position = c(0.25, 0.85),
+    legend.direction = "horizontal",
+    legend.justification = "center",
     plot.background = element_rect(fill = "white", size = 0)
   )
 

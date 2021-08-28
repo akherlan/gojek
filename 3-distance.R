@@ -1,7 +1,7 @@
 # Title:           Distance
 # Author:          Andi Herlan
 # Email:           andi.herlan@protonmail.com
-# Data Used:       gojek.rds
+# Data Used:       gojek.rds, java.rds
 # Packages Used:   dplyr, mapboxapi, ggplot2, ggrepel
 # Output File:     distance.png
 # Data Output:     -
@@ -98,6 +98,7 @@ p1 <- ggplot(data = distn) +
     text = element_text(family = "Sans"),
     legend.position = c(0.85, 0.28),
     panel.grid.minor = element_blank(),
+    plot.title.position = "plot",
     plot.subtitle = element_text(colour = "gray40"),
     plot.caption = element_text(colour = "gray60"),
     axis.title = element_text(colour = "gray50"),

@@ -74,6 +74,7 @@ ggplot(data = clock) +
     panel.grid.minor = element_blank(),
     plot.subtitle = element_text(colour = "gray40"),
     plot.caption = element_text(colour = "gray60"),
+    plot.title.position = "plot",
     plot.background = element_rect(fill = "white", size = 0)
   )
 
