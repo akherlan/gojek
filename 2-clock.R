@@ -2,7 +2,7 @@
 # Author:          Andi Herlan
 # Email:           andi.herlan@protonmail.com
 # Data Used:       gojek.rds
-# Packages Used:   dplyr, lubridate, ggplot2
+# Packages Used:   dplyr, lubridate, ggplot2, gridExtra
 # Output File:     clock.png
 # Data Output:     -
 # Reference:       https://www.wjakethompson.com/post/2018-11-27-ggclock/
@@ -14,6 +14,7 @@ rm(list = ls())
 library(dplyr)
 library(lubridate)
 library(ggplot2)
+library(gridExtra)
 
 # main data
 gojek <- readRDS("output/gojek.rds")
@@ -28,10 +29,22 @@ clock <- gojek %>%
          col = gojek$vehicle) %>% 
   arrange(datetime)
 
+# total time on the road
 total_time <- round(sum(gojek$duration)/3600, 2)
 
-# plot
-ggplot(data = clock) +
+# duration per year
+dura <- gojek %>% 
+  select(datetime, duration) %>% 
+  mutate(year = year(datetime)) %>% 
+  group_by(year) %>% 
+  summarise(duration = sum(duration), .groups = "drop") %>% 
+  mutate(x1 = cumsum(duration),
+         x0 = x1 - duration)
+
+limit_x_max <- round(max(dura$x1)) + 15500
+
+# plot clock
+p1 <- ggplot(data = clock) +
   # am / pm
   annotate(geom = "text", x = 0, y = 0.5, label = "AM",
            size = 4, colour = "gray40", alpha = 0.3) +
@@ -58,9 +71,8 @@ ggplot(data = clock) +
        subtitle = paste("Andi's movement in", 
                         min(year(gojek$datetime)), "-", 
                         max(year(gojek$datetime)), "(• is GoCar)", sep = " "),
-       caption = paste("Last movement at", tail(gojek$datetime, 1),
-                       "AM for vaccination\nGithub: akherlan | Data: GOJEK", 
-                       sep = " ")) +
+       caption = paste0("Last movement at ", tail(gojek$datetime, 1),
+                        " AM for vaccination")) +
   # styling
   theme_minimal() +
   theme(
@@ -75,9 +87,40 @@ ggplot(data = clock) +
     plot.subtitle = element_text(colour = "gray40"),
     plot.caption = element_text(colour = "gray60"),
     plot.title.position = "plot",
+    # panel.border = element_rect(colour = "black", size = 1, fill = "transparent", linetype = 2),
     plot.background = element_rect(fill = "white", size = 0)
   )
 
+# plot duration
+p2 <- ggplot(data = dura) +
+  geom_text(aes(x = x1 + 1500, y = year, 
+                label = paste0("~", round(duration/3600), " hours")),
+           size = 2.8, colour = "gray60", hjust = "left") +
+  geom_linerange(aes(xmin = x0, xmax = x1, y = year),
+                 size = 4.6, alpha = 0.5, colour = "#00AA13") + 
+  scale_x_continuous(limits = c(0, limit_x_max)) +
+  labs(title = "Duration per year",
+       caption = "Github: akherlan | Data: GOJEK") +
+  theme_minimal() +
+  theme(
+    text = element_text(family = "Sans"),
+    axis.title = element_blank(),
+    axis.ticks = element_blank(),
+    axis.text.x = element_blank(),
+    axis.text.y = element_text(size = 8, colour = "gray40"),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    plot.subtitle = element_text(colour = "gray40"),
+    plot.caption = element_text(colour = "gray60"),
+    plot.title = element_text(size = 10, colour = "gray40"),
+    plot.title.position = "plot",
+    plot.background = element_rect(fill = "white", size = 0)
+  )
+
+# combine plot
+p3 <- grid.arrange(p1, p2, ncol = 1, nrow = 2, heights = c(4, 1.2))
+
 # save PNG
-ggsave("clock.png", path = "figs", dpi = 150, units = "px",
-       width = 2*540, height = 2*507)
+ggsave("clock.png", plot = p3, path = "figs", dpi = 150, units = "px",
+       width = 2.5*306, height = 2.5*488)
+
