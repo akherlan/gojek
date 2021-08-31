@@ -3,6 +3,7 @@
 # Email:           andi.herlan@protonmail.com
 # Data Used:       gojek.rds
 # Packages Used:   dplyr, lubridate, ggplot2, gridExtra
+# Source:          colours.R
 # Output File:     clock.png
 # Data Output:     -
 # Reference:       https://www.wjakethompson.com/post/2018-11-27-ggclock/
@@ -15,6 +16,9 @@ library(dplyr)
 library(lubridate)
 library(ggplot2)
 library(gridExtra)
+
+# import colour definition
+source("colours.R")
 
 # main data
 gojek <- readRDS("output/gojek.rds")
@@ -56,10 +60,10 @@ p1 <- ggplot(data = clock) +
            label = paste0("Total\n", total_time, " hours\non the road")) +
   # ride
   geom_segment(aes(x, y, xend = x + 1, yend = y + 0.8), 
-               colour = "#00AA13", alpha = 0.4) +
+               colour = gc_green50, alpha = 0.4) +
   # car
   geom_point(data = filter(clock, clock$col == "Car"), 
-             aes(x, y), colour = "#000000", alpha = 0.8) +
+             aes(x, y), colour = "black", alpha = 0.8) +
   # coordinate
   coord_polar() +
   expand_limits(y = c(-1, 1)) +
@@ -68,7 +72,7 @@ p1 <- ggplot(data = clock) +
                      labels = c(3, 6, 9, "12")) +
   # text
   labs(title = "Time with GOJEK", x = NULL, y = NULL,
-       subtitle = paste("Andi's movement in", 
+       subtitle = paste("Movement in", 
                         min(year(gojek$datetime)), "-", 
                         max(year(gojek$datetime)), "(• is GoCar)", sep = " "),
        caption = paste0("Last movement at ", tail(gojek$datetime, 1),
@@ -97,7 +101,7 @@ p2 <- ggplot(data = dura) +
                 label = paste0("~", round(duration/3600), " hours")),
            size = 2.8, colour = "gray60", hjust = "left") +
   geom_linerange(aes(xmin = x0, xmax = x1, y = year),
-                 size = 4.6, alpha = 0.5, colour = "#00AA13") + 
+                 size = 4.6, alpha = 0.5, colour = gc_green50) + 
   scale_x_continuous(limits = c(0, limit_x_max)) +
   labs(title = "Duration per year",
        caption = "Github: akherlan | Data: GOJEK") +

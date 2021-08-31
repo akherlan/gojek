@@ -36,7 +36,7 @@ Biaya ini belum termasuk dengan penggunaan GoTagihan (GoBills) untuk BPJS, pulsa
 
 Perjalanan terbanyak ketika ng-Gojek adalah dari stasiun (atau halte) untuk pulang, disusul oleh perjalanan pulang selepas beraktivitas di luar selain kerja.
 
-Ada hubungan yang erat antara kantor dengan aktivitas transit.
+Ada hubungan yang erat antara kantor dengan aktivitas transit, dihubungkan dengan aktivitas ng-Gojek.
 
 Jika saya harus menggunakan uang tunai kemungkinan karena saya kehabisan GoPay saat berada di luar rumah.
 

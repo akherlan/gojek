@@ -3,10 +3,10 @@
 # Email:           andi.herlan@protonmail.com
 # Data Used:       gojek.rds
 # Packages Used:   dplyr, tidyr, stringr, ggplot2, ggalluvial
+# Source:          colours.R
 # Output File:     needs.png
 # Data Output:     od.rds
 # Reference:       https://corybrunson.github.io/ggalluvial
-
 
 # clear environment
 rm(list = ls())
@@ -16,6 +16,9 @@ library(tidyr)
 library(stringr)
 library(ggplot2)
 library(ggalluvial)
+
+# import colour definition
+source("colours.R")
 
 # main data
 gojek <- readRDS("output/gojek.rds")
@@ -92,9 +95,6 @@ od <- od %>%
                          !is.na(home), NA, TRUE))))
   )
 
-# empty category
-nrow(od) - colSums(!is.na(od[,4:8])) %>% as.matrix() %>% sum()
-
 # odplot <- od %>% 
 #   select(-datetime) %>%
 #   mutate(count = 1) %>% 
@@ -148,12 +148,13 @@ odp$destination <- odp$destination %>%
 # plot
 ggplot(data = odp,
        aes(axis1 = origin, axis2 = destination, y = freq)) +
+  geom_alluvium(aes(fill = payment)) +
+  geom_stratum(colour = "gray40") +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum))) +
   scale_x_discrete(limits = c("Origin", "Needs"), 
                    expand = c(0, 0.2, 0, 0.7)) +
-  geom_alluvium(aes(fill = payment)) +
-  geom_stratum() +
-  geom_text(stat = "stratum", aes(label = after_stat(stratum))) +
-  scale_fill_manual(values = c("orange", "#00BBE0"),
+  # scale_fill_manual(values = c("orange", "#00BBE0"),
+  scale_fill_manual(values = c(gc_orange, gc_blue),
                     label = c("Cash", "GoPay")) +
   annotate(geom = "text", x = 2.25, y = 190, 
            label = paste("The most frequence trip", 
@@ -188,7 +189,6 @@ ggplot(data = odp,
     legend.position = c(0.75, 0.85),
     legend.direction = "vertical",
     legend.justification = "left",
-    # panel.border = element_rect(colour = "black", size = 1, fill = "transparent", linetype = 2),
     plot.title.position = "plot",
     plot.subtitle = element_text(colour = "gray40"),
     plot.caption = element_text(colour = "gray60"),

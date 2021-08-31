@@ -3,6 +3,7 @@
 # Email:           andi.herlan@protonmail.com
 # Data Used:       gojek.rds, java.rds
 # Packages Used:   dplyr, mapboxapi, ggplot2, ggrepel, gridExtra
+# Source:          colours.R
 # Output File:     distance.png
 # Data Output:     -
 # Reference:       https://ggplot2-book.org/annotations.html
@@ -17,6 +18,9 @@ library(mapboxapi)
 library(ggplot2)
 library(ggrepel)
 library(gridExtra)
+
+# import colour definition
+source("colours.R")
 
 # main data
 gojek <- readRDS("output/gojek.rds")
@@ -76,7 +80,7 @@ p1 <- ggplot(data = distn) +
            colour = "gray50") +
   # late for the last train
   annotate(geom = "point", x = latetrain$duration/60, alpha = 0.3,
-           y = latetrain$distance, size = 4, col = "orange") +
+           y = latetrain$distance, size = 4, col = gc_orange) +
   annotate(geom = "curve", x = 50, y = 17, size = 0.3, col = "gray50",
            xend = latetrain$duration/60+0.6, yend = latetrain$distance,
            curvature = 0.3, arrow = arrow(length = unit(2, "mm"))) +
@@ -89,7 +93,7 @@ p1 <- ggplot(data = distn) +
            size = 3, col = "gray50") +
   # resettlement
   annotate(geom = "point", x = comeback$duration/60, alpha = 0.3,
-           y = comeback$distance, size = 4, col = "orange") +
+           y = comeback$distance, size = 4, col = gc_orange) +
   annotate(geom = "curve", x = 62, y = 25, size = 0.3, col = "gray50",
            xend = comeback$duration/60-0.2, yend = comeback$distance-0.4,
            curvature = 0.3, arrow = arrow(length = unit(2, "mm"))) +
@@ -107,7 +111,7 @@ p1 <- ggplot(data = distn) +
   # scales
   scale_y_continuous(breaks =  seq(0, 30, 5)) +
   scale_x_continuous(limits = c(0, 75), breaks = c(seq(0, 15, 5), 30, 45, 60, 75)) +
-  scale_colour_manual(values = c("#000000", "#00AA13")) +
+  scale_colour_manual(values = c("black", gc_green70)) +
   # main labels
   labs(
     title = "Movement with GOJEK",
@@ -134,7 +138,7 @@ p1 <- ggplot(data = distn) +
 # duration density
 dx <- ggplot(dens) +
   geom_density(aes(x = duration/60, y = -..density..), 
-               fill = "lightblue", colour = "gray35", alpha = 0.5) +
+               fill = gc_green20, colour = "gray35", alpha = 0.5) +
   labs(x = "Duration (minutes)", caption = "Github: akherlan | Data: GOJEK") +
   scale_x_continuous(limits = c(0, 75), breaks = c(seq(0, 15, 5), 30, 45, 60, 75)) +
   theme_minimal() +
@@ -154,7 +158,7 @@ dx <- ggplot(dens) +
 # distance density
 dy <- ggplot(dens) +
   geom_density(aes(x = -..density.., y = distance), 
-               fill = "lightblue", colour = "gray35", alpha = 0.5) +
+               fill = gc_green20, colour = "gray35", alpha = 0.5) +
   scale_y_continuous(breaks =  seq(0, 30, 5)) +
   labs(y = "Distance (km)", title = " ", subtitle = " ") +
   theme_minimal() +
@@ -178,7 +182,7 @@ p2 <- ggplot(java) +
   geom_sf(data = odline, colour = "black", size = 0.5, linetype = 2) +
   # location
   geom_point(data = od, aes(long, lat), 
-             colour = "red", size = 2, alpha = 0.6) +
+             colour = gc_red, size = 2, alpha = 0.6) +
   coord_sf() +
   theme_void()
 
