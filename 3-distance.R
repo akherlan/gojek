@@ -2,10 +2,11 @@
 # Author:          Andi Herlan
 # Email:           andi.herlan@protonmail.com
 # Data Used:       gojek.rds, java.rds
-# Packages Used:   dplyr, mapboxapi, ggplot2, ggrepel
+# Packages Used:   dplyr, mapboxapi, ggplot2, ggrepel, gridExtra
 # Output File:     distance.png
 # Data Output:     -
 # Reference:       https://ggplot2-book.org/annotations.html
+#                  https://genviz.org/module-02-r/0002/03/02/arrangingPlots/
 
 
 # clear environment
@@ -15,6 +16,7 @@ library(dplyr)
 library(mapboxapi)
 library(ggplot2)
 library(ggrepel)
+library(gridExtra)
 
 # main data
 gojek <- readRDS("output/gojek.rds")
@@ -40,7 +42,27 @@ latetrain <- gojek %>%
   head(1) %>% 
   select(duration, distance, driver)
 
-# plot 
+# data for map
+java <- readRDS("output/java.rds")
+
+# geocoding
+od <- tribble(~city, "Pelabuhan Merak", "Banyuwangi")
+odcoord <- lapply(od$city, mb_geocode) %>% as.data.frame()
+odcoord <- as_tibble(t(odcoord))
+names(odcoord) <- c("long", "lat")
+od <- bind_cols(od, odcoord)
+
+# longtrip Merak - Banyuwangi
+odline <- mb_directions(origin = "pelabuhan merak", 
+                        destination = "banyuwangi",
+                        profile = "driving",
+                        language = "id")
+
+# data for density plot
+dens <- gojek %>% 
+  select(duration, distance)
+
+# scatter plot -----
 p1 <- ggplot(data = distn) +
   # total distance
   annotate(geom = "text", x = 1.8, y = 28, size = 3.2, hjust = "left",
@@ -87,11 +109,12 @@ p1 <- ggplot(data = distn) +
   scale_x_continuous(limits = c(0, 75), breaks = c(seq(0, 15, 5), 30, 45, 60, 75)) +
   scale_colour_manual(values = c("#000000", "#00AA13")) +
   # main labels
-  labs(title = "Movement with GOJEK", 
-       subtitle = paste0("As far as Merak to Banyuwangi (>1100 km) by car"),
-       caption = "Github: akherlan | Data: GOJEK",
-       x = "Duration (minutes)", y = "Distance (km)",
-       colour = "GO") +
+  labs(
+    title = "Movement with GOJEK",
+    subtitle = paste0("As far as Merak to Banyuwangi (>1100 km) by car"),
+    # caption = "Github: akherlan | Data: GOJEK",
+    # x = "Duration (minutes)", y = "Distance (km)",
+    colour = "GO") +
   # styling
   theme_minimal() +
   theme(
@@ -101,31 +124,53 @@ p1 <- ggplot(data = distn) +
     plot.title.position = "plot",
     plot.subtitle = element_text(colour = "gray40"),
     plot.caption = element_text(colour = "gray60"),
-    axis.title = element_text(colour = "gray50"),
-    axis.text = element_text(colour = "gray50"),
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    plot.margin = unit(c(0.2, 0.2, 0, 0), "cm"),
     plot.background = element_rect(fill = "white", size = 0)
   )
 
-# save PNG
-ggsave("distance.png", path = "figs", dpi = 150, units = "px",
-       width = 2*817, height = 2*516)
+# density plot -----
+# duration density
+dx <- ggplot(dens) +
+  geom_density(aes(x = duration/60, y = -..density..), 
+               fill = "lightblue", colour = "gray35", alpha = 0.5) +
+  labs(x = "Duration (minutes)", caption = "Github: akherlan | Data: GOJEK") +
+  scale_x_continuous(limits = c(0, 75), breaks = c(seq(0, 15, 5), 30, 45, 60, 75)) +
+  theme_minimal() +
+  theme(
+    text = element_text(family = "Sans"),
+    axis.ticks.y = element_blank(),
+    axis.title.y = element_blank(),
+    axis.text.y = element_blank(),
+    axis.title = element_text(colour = "gray50"),
+    axis.text = element_text(colour = "gray50"),
+    plot.caption = element_text(colour = "gray60"),
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor = element_blank(),
+    plot.margin = unit(c(0, 0.2, .2, 0), "cm"),
+    plot.background = element_rect(fill = "white", size = 0))
 
-# add map data
-java <- readRDS("output/java.rds")
+# distance density
+dy <- ggplot(dens) +
+  geom_density(aes(x = -..density.., y = distance), 
+               fill = "lightblue", colour = "gray35", alpha = 0.5) +
+  scale_y_continuous(breaks =  seq(0, 30, 5)) +
+  labs(y = "Distance (km)", title = " ", subtitle = " ") +
+  theme_minimal() +
+  theme(
+    text = element_text(family = "Sans"),
+    axis.ticks.x = element_blank(),
+    axis.title.x = element_blank(),
+    axis.text.x = element_blank(),
+    axis.title = element_text(colour = "gray50"),
+    axis.text = element_text(colour = "gray50"),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor = element_blank(),
+    plot.margin = unit(c(0.2, 0, 0, 0.2), "cm"),
+    plot.background = element_rect(fill = "white", size = 0))
 
-# geocoding
-od <- tribble(~city, "Pelabuhan Merak", "Banyuwangi")
-odcoord <- lapply(od$city, mb_geocode) %>% as.data.frame()
-odcoord <- as_tibble(t(odcoord))
-names(odcoord) <- c("long", "lat")
-od <- bind_cols(od, odcoord)
-
-# longtrip Merak - Banyuwangi
-odline <- mb_directions(origin = "pelabuhan merak", 
-                        destination = "banyuwangi",
-                        profile = "driving",
-                        language = "id")
-
+# map plot -----
 p2 <- ggplot(java) +
   # island
   geom_sf(fill = "gray90", alpha = 0.3, colour = "gray80", size = 0.2) +
@@ -137,8 +182,24 @@ p2 <- ggplot(java) +
   coord_sf() +
   theme_void()
 
-p1 + annotation_custom(ggplotGrob(p2), xmin = 0, xmax = 30, ymin = 20, ymax = 27)
+p3 <- p1 + annotation_custom(ggplotGrob(p2), xmin = 0, xmax = 30, ymin = 19, ymax = 26)
+
+# composition -----
+c1 <- grid.arrange(p1, dy, dx,
+                   ncol = 2, nrow = 2, 
+                   layout_matrix = rbind(c(2,1), c(NA,3)),
+                   widths = c(0.1, 0.9), heights = c(0.8, 0.2))
+
+# save PNG
+ggsave("distance.png", path = "figs", dpi = 150, units = "px",
+       width = 2*817, height = 2*516, plot = c1)
+
+# composition plot with map -----
+c2 <- grid.arrange(p3, dy, dx,
+                   ncol = 2, nrow = 2, 
+                   layout_matrix = rbind(c(2,1), c(NA,3)),
+                   widths = c(0.1, 0.9), heights = c(0.8, 0.2))
 
 # save PNG
 ggsave("distance_map.png", path = "figs", dpi = 150, units = "px",
-       width = 2*817, height = 2*516)
+       width = 2*817, height = 2*516, plot = c2)
