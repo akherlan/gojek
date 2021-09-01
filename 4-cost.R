@@ -126,7 +126,7 @@ ggplot() +
   labs(x = NULL, y = "Thousands of IDR", fill = NULL,
        title = "Expences with GOJEK",
        subtitle = "Cost for movement (Cash Vs. GoPay)",
-       caption = "Github: akherlan | Data: GOJEK") +
+       caption = "CC BY-SA | Github: akherlan | Data: GOJEK") +
   # styling
   facet_wrap(~payment, strip.position = "bottom") +
   # scale_fill_manual(values = c("#B3E7F3", "#000000", "#00BBE0", "#00AE00")) +

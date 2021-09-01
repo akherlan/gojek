@@ -4,7 +4,7 @@
 
 Data diimpor dari Gmail ke Google Sheets melalui Google Apps Script ([kode](code.gs)), kemudian diekspor ke format csv untuk diolah menggunakan R ([wrangler](1-wrangling.R)).
 
-Proyek personal ini terinspirasi dari [Mas Rasyid Ridha](http://rasyidridha.com/datague/data-gojek/) yang pernah mengolah data Gojek miliknya pribadi.
+Proyek personal ini terinspirasi dari [Mas Rasyid Ridha](https://github.com/rasyidstat/) yang pernah [mengolah data](http://rasyidridha.com/datague/data-gojek/) Gojek miliknya pribadi.
 
 ### Clock
 
@@ -41,3 +41,11 @@ Ada hubungan yang erat antara kantor dengan aktivitas transit, dihubungkan denga
 Jika saya harus menggunakan uang tunai kemungkinan karena saya kehabisan GoPay saat berada di luar rumah.
 
 Pertanyaan berikutnya adalah kenapa ada perjalanan dari rumah ke rumah? Punya rumah lebih dari satu! Hahahaha... Saya pindah-pindah kost sebetulnya.
+
+------------------------------------------------------------------------
+
+### License
+
+-   Kode: [MIT License](LINCENSE)
+-   Media, gambar, konten tulisan: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
+-   Data: sesuai dengan Terms & Conditions Gojek

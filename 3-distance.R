@@ -116,7 +116,7 @@ p1 <- ggplot(data = distn) +
   labs(
     title = "Movement with GOJEK",
     subtitle = paste0("As far as Merak to Banyuwangi (>1100 km) by car"),
-    # caption = "Github: akherlan | Data: GOJEK",
+    # caption = "CC BY-SA | Github: akherlan | Data: GOJEK",
     # x = "Duration (minutes)", y = "Distance (km)",
     colour = "GO") +
   # styling
@@ -139,7 +139,7 @@ p1 <- ggplot(data = distn) +
 dx <- ggplot(dens) +
   geom_density(aes(x = duration/60, y = -..density..), 
                fill = gc_green20, colour = "gray35", alpha = 0.5) +
-  labs(x = "Duration (minutes)", caption = "Github: akherlan | Data: GOJEK") +
+  labs(x = "Duration (minutes)", caption = "CC BY-SA | Github: akherlan | Data: GOJEK") +
   scale_x_continuous(limits = c(0, 75), breaks = c(seq(0, 15, 5), 30, 45, 60, 75)) +
   theme_minimal() +
   theme(

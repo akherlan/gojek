@@ -104,7 +104,7 @@ p2 <- ggplot(data = dura) +
                  size = 4.6, alpha = 0.5, colour = gc_green50) + 
   scale_x_continuous(limits = c(0, limit_x_max)) +
   labs(title = "Duration per year",
-       caption = "Github: akherlan | Data: GOJEK") +
+       caption = "CC BY-SA | Github: akherlan | Data: GOJEK") +
   theme_minimal() +
   theme(
     text = element_text(family = "Sans"),

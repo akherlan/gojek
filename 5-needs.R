@@ -177,7 +177,7 @@ ggplot(data = odp,
            size = 3.2, col = "gray50") +
   labs(title = "Effort with GOJEK",
        subtitle = "I even want to come home from home #SelaluAdaJalan #DiRumahAja",
-       caption = "Github: akherlan | Data: GOJEK", 
+       caption = "CC BY-SA | Github: akherlan | Data: GOJEK", 
        fill = "Payment") +
   theme_minimal() +
   theme(
